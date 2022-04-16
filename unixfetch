@@ -29,10 +29,10 @@ echo "UPTIME: $(uptime -p)"
 current_distro=`cat /etc/*-release | grep "^ID=" | grep -E -o "[a-z]\w+"`
 close_distro=`cat /etc/*-release | grep "^ID_LIKE=" | grep -E -o "[a-z]\w+"`
 if [ "$close_distro" = "debian" ]; then
-echo "$(dpkg-query -l | grep "^ii" | wc -l ")
+echo "$(dpkg-query -l | grep "^ii" | wc -l )"
 fi
 if [ "$close_distro" = "arch" ]; then
 echo "$(pacman -Q | wc -l)"
 fi
-echo "MEMORY: $(free | grep Mem | awk 'printf("%.2f", $4/$2 * 100.0)}')% free of $(free -m| grep Mem |awk '{printf($2)}')MB"
+echo "MEMORY: $(awk '/MemFree/{free=$2} /MemTotal/{total=$2} END{print (free*100)/total}' /proc/meminfo)MB free memory"
 
